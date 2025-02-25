@@ -1,5 +1,8 @@
+import { redirect } from "next/navigation";
+
 const HomePage = () => {
-  return <h1>Olá, Mundo</h1>;
-}
- 
+  redirect("/rla-donalds");
+  return null;
+};
+
 export default HomePage;
