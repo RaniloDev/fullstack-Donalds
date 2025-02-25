@@ -4,12 +4,12 @@ import ProductDetails from "./components/product-details";
 import { notFound } from "next/navigation";
 
 interface ProductPageProps {
-  params: { slug: string; productId: string };
+  params: Record<string, string>;
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
   const { productId } = params;
-  
+
   const product = await db.product.findUnique({
     where: { id: productId },
     include: {
