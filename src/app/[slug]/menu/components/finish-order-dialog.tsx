@@ -23,7 +23,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PatternFormat } from "react-number-format";
-import { useEffect } from "react";
+import { useContext, useEffect, useTransition } from "react";
+import { createOrder } from "../actions/create-order";
+import { useParams, useSearchParams } from "next/navigation";
+import { ConsumptionMethod } from "@prisma/client";
+import { CartContext } from "../context/cart";
+import { toast } from "sonner";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -44,21 +50,42 @@ type FormSchemaType = z.infer<typeof formSchema>;
 
 interface FinishOrderDialog {
   open: boolean;
-  onOpenChange: (open: boolean) => void
+  onOpenChange: (open: boolean) => void;
 }
 
-const FinishOrderDialog = ({open, onOpenChange}: FinishOrderDialog) => {
+const FinishOrderDialog = ({ open, onOpenChange }: FinishOrderDialog) => {
+  const { slug } = useParams<{ slug: string }>();
+  const { products } = useContext(CartContext);
+  const searchParams = useSearchParams();
+  const [isPeding, startTransition] = useTransition();
   const methods = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       cpf: "",
     },
-    shouldUnregister: true
+    shouldUnregister: true,
   });
 
-  const onSubmit = (data: FormSchemaType) => {
-    console.log(data);
+  const onSubmit = async (data: FormSchemaType) => {
+    try {
+      const consumptionMethod = searchParams.get(
+        "consumptionMethod",
+      ) as ConsumptionMethod;
+      startTransition(async () => {
+        await createOrder({
+          consumptionMethod,
+          customerCpf: data.cpf,
+          customerName: data.name, // Corrigido
+          products,
+          slug,
+        });
+        onOpenChange(false);
+        toast.success("Pedido finalizado com sucesso");
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -73,8 +100,7 @@ const FinishOrderDialog = ({open, onOpenChange}: FinishOrderDialog) => {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerTrigger asChild>
-      </DrawerTrigger>
+      <DrawerTrigger asChild></DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Finalizar Pedido</DrawerTitle>
@@ -124,11 +150,15 @@ const FinishOrderDialog = ({open, onOpenChange}: FinishOrderDialog) => {
                   type="submit"
                   variant="destructive"
                   className="rounded-full"
+                  disabled={isPeding}
                 >
+                  {isPeding && <Loader2Icon className="animate-spin" />}
                   Finalizar
                 </Button>
                 <DrawerClose>
-                  <Button className="w-full rounded-full" variant="outline">Cancelar</Button>
+                  <Button className="w-full rounded-full" variant="outline">
+                    Cancelar
+                  </Button>
                 </DrawerClose>
               </DrawerFooter>
             </form>
