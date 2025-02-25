@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -5,6 +7,8 @@ import { formatCurrency } from "@/helpers/format-currency";
 import { OrderStatus, Prisma } from "@prisma/client";
 import { ChevronLeftIcon, ScrollTextIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 interface OrderListProps {
   orders: Prisma.OrderGetPayload<{
@@ -24,18 +28,20 @@ interface OrderListProps {
   }>[];
 }
 
+
 const getStatusLabel = (status: OrderStatus) => {
   if (status === "FINISHED") return "Finalizado";
   if (status === "IN_PREPARATION") return "Em preparo";
   if (status === "PENDING") return "Pendente";
-
   return "";
 };
 
 const OrderList = ({ orders }: OrderListProps) => {
+  const router = useRouter();
+  
   return (
     <div className="space-y-6 p-6">
-      <Button size="icon" variant="secondary" className="rounded-full">
+      <Button size="icon" variant="secondary" className="rounded-full" onClick={() => router.back()}>
         <ChevronLeftIcon />
       </Button>
       <div className="flex items-center gap-3">
@@ -46,13 +52,14 @@ const OrderList = ({ orders }: OrderListProps) => {
         <Card key={order.id}>
           <CardContent className="space-y-4 p-5">
             <div
-              className={`w-fit rounded-full px-2 py-1 text-xs font-semibold text-white ${
-                order.status === OrderStatus.FINISHED
-                  ? "bg-green-400 text-white"
-                  : order.status === OrderStatus.IN_PREPARATION
-                    ? "bg-yellow-400 text-white"
-                    : "bg-gray-200 text-gray-500"
-              } `}
+              className={clsx(
+                "w-fit rounded-full px-2 py-1 text-xs font-semibold text-white",
+                {
+                  "bg-green-400": order.status === OrderStatus.FINISHED,
+                  "bg-yellow-400": order.status === OrderStatus.IN_PREPARATION,
+                  "bg-gray-400 text-gray-100": order.status === OrderStatus.PENDING,
+                }
+              )}
             >
               {getStatusLabel(order.status)}
             </div>
@@ -63,6 +70,7 @@ const OrderList = ({ orders }: OrderListProps) => {
                   alt={order.restaurant.name}
                   className="rounded-sm"
                   fill
+                  priority
                 />
               </div>
               <p className="text-sm font-semibold">{order.restaurant.name}</p>

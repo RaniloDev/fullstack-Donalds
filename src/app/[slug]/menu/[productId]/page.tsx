@@ -8,8 +8,9 @@ interface ProductPageProps {
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
-  const { slug, productId } = params;
-  const product = await db.product.findFirst({
+  const { productId } = params;
+  
+  const product = await db.product.findUnique({
     where: { id: productId },
     include: {
       restaurant: {
@@ -20,8 +21,6 @@ const ProductPage = async ({ params }: ProductPageProps) => {
       },
     },
   });
-
-  console.log("Produto:", product); // Verifique os dados retornados aqui
 
   if (!product) {
     return notFound();

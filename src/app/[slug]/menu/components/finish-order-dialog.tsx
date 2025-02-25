@@ -76,7 +76,7 @@ const FinishOrderDialog = ({ open, onOpenChange }: FinishOrderDialog) => {
         await createOrder({
           consumptionMethod,
           customerCpf: data.cpf,
-          customerName: data.name, // Corrigido
+          customerName: data.name,
           products,
           slug,
         });
@@ -90,7 +90,6 @@ const FinishOrderDialog = ({ open, onOpenChange }: FinishOrderDialog) => {
 
   useEffect(() => {
     if (!open) {
-      // Limpar o formulário quando o Drawer for fechado
       methods.reset({
         name: "",
         cpf: "",
@@ -100,7 +99,7 @@ const FinishOrderDialog = ({ open, onOpenChange }: FinishOrderDialog) => {
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerTrigger asChild></DrawerTrigger>
+      <DrawerTrigger asChild />
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Finalizar Pedido</DrawerTitle>
@@ -155,7 +154,7 @@ const FinishOrderDialog = ({ open, onOpenChange }: FinishOrderDialog) => {
                   {isPeding && <Loader2Icon className="animate-spin" />}
                   Finalizar
                 </Button>
-                <DrawerClose>
+                <DrawerClose asChild>
                   <Button className="w-full rounded-full" variant="outline">
                     Cancelar
                   </Button>

@@ -24,8 +24,6 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails = ({ product }: ProductDetailsProps) => {
-  console.log("Detalhes do Produto:", product); // Verifique os dados aqui
-
   const { toggleCart, addProduct } = useContext(CartContext);
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -113,9 +111,9 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                 <h4 className="font-semibold">Ingredientes</h4>
               </div>
               <ul className="list-disc px-5 text-sm text-muted-foreground">
-                {product.ingredients.map((ingredient) => (
+                {product.ingredients?.map((ingredient) => (
                   <li key={ingredient}>{ingredient}</li>
-                ))}
+                )) || <li>Ingredientes não disponíveis</li>}
               </ul>
             </div>
           </ScrollArea>

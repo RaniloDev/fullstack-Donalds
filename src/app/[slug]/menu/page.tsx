@@ -23,7 +23,7 @@ const RestaurantMenuPage = async ({
     return notFound();
   }
 
-  const restaurant = await db.restaurant.findFirst({
+  const restaurant = await db.restaurant.findUnique({
     where: { slug },
     include: {
       menuCategories: {

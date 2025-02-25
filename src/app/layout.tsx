@@ -6,6 +6,8 @@ import { Poppins } from "next/font/google";
 import { CartProvider } from "./[slug]/menu/context/cart";
 import { Toaster } from "@/components/ui/sonner";
 
+<html lang="pt" />
+
 const poppins = Poppins({
   weight: [
     "100",
