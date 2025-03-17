@@ -1,7 +1,9 @@
-import { db } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import RestaurantHeader from "./components/header";
+
+import { db } from "@/lib/prisma";
+
 import RestaurantCategories from "./components/categories";
+import RestaurantHeader from "./components/header";
 
 interface RestaurantMenuPageProps {
   params: { slug: string };

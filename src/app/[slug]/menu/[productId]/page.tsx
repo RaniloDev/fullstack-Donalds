@@ -1,18 +1,16 @@
-import { db } from "@/lib/prisma";
-import ProductHeader from "./components/product-header";
-import ProductDetails from "./components/product-details";
 import { notFound } from "next/navigation";
+
+import { db } from "@/lib/prisma";
+
+import ProductDetails from "./components/product-details";
+import ProductHeader from "./components/product-header";
 
 interface PageParams {
   slug: string;
   productId: string;
 }
 
-interface ProductPageProps {
-  params: PageParams;
-}
-
-const ProductPage = async ({ params }: ProductPageProps) => {
+const ProductPage = async ({ params }: { params: PageParams }) => {
   const { productId } = params;
 
   const product = await db.product.findUnique({

@@ -3,8 +3,10 @@
 import "./globals.css";
 
 import { Poppins } from "next/font/google";
-import { CartProvider } from "./[slug]/menu/context/cart";
+
 import { Toaster } from "@/components/ui/sonner";
+
+import { CartProvider } from "./[slug]/menu/context/cart";
 
 <html lang="pt" />
 

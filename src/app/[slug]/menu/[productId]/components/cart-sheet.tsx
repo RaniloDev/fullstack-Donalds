@@ -1,17 +1,18 @@
+import { useContext, useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-
-import { CartContext } from "../../context/cart";
-import { useContext, useState } from "react";
-import CartProductItem from "./cart-product-item";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/helpers/format-currency";
+
 import FinishOrderDialog from "../../components/finish-order-dialog";
+import { CartContext } from "../../context/cart";
+import CartProductItem from "./cart-product-item";
 
 const CartSheet = () => {
   const [finishOrderDialogIsOpen, setFinishOrderDialogIsOpen] = useState(false); // Corrigido aqui!
