@@ -3,8 +3,13 @@ import ProductHeader from "./components/product-header";
 import ProductDetails from "./components/product-details";
 import { notFound } from "next/navigation";
 
+interface PageParams {
+  slug: string;
+  productId: string;
+}
+
 interface ProductPageProps {
-  params: Record<string, string>;
+  params: PageParams;
 }
 
 const ProductPage = async ({ params }: ProductPageProps) => {
